@@ -9,7 +9,7 @@ module(..., package.seeall)
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0}  
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2}  -- levelSpeed -> fast: 3, normal:2, slow: 1
 
 
 --********************************************************************************************************************************************************--
@@ -64,6 +64,38 @@ end
 --**********************************************************************************************************************************--
 
 
+--**********************************************************************************************************************************--
+--
+-- setTimeSpeed(timeSpeed) -> Method to assign a custom value to the speed of the timer for the level(if its not defined it will be 1000ms by default) 
+-- @timeSpeed -> use a positive integer to represent the speed of the timer for the level
+--
+--**********************************************************************************************************************************--
+
+function Level:setTimeSpeed(timeSpeed)           
+
+	self.timeSpeed = timeSpeed
+
+end
+
+--**********************************************************************************************************************************--
+
+
+--**********************************************************************************************************************************--
+--
+-- getTimeSpeed() -> Method to get the current custom value of the initial time of the level(if its not defined it will be 1000ms by default) 
+-- @return -> returns the integer value with the speed of the timer
+--
+--**********************************************************************************************************************************--
+
+function Level:getTimeSpeed()           
+
+	return self.timeSpeed
+
+end
+
+--**********************************************************************************************************************************--
+
+
 --*************************************************************************************************************--
 --
 -- displayTimer() -> Method to display a count down timer in the mobile device, it goes from "initTime" value to 0
@@ -96,7 +128,7 @@ function Level:displayTimer()
 		end
 	end
 	
-	timer.performWithDelay(500, listener, 62) 
+	timer.performWithDelay(self.timeSpeed, listener, 62) 
 	
 	timeGroup:insert( self.textObj )
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
@@ -110,21 +142,33 @@ end
 
 --*************************************************************************************************************--
 --
--- timerRun() -> Method to run a timed event, it goes from "initTime" value to 0
+-- timerRun(textW) -> Method to run a timed event, it goes from "initTime" value to 0
+-- @textW -> text that displays the count down, in order to update it each second we get it here and send it back as a display group
+-- @return -> display group with the interface text updating each second
 --
 --*************************************************************************************************************--
 
-function Level:timerRun()
-
+function Level:timerRun(textW)
+		
+	local timeGroup = display.newGroup()
+		
 	local function listener( event )
 	    if (self.initTime>-1) then
+			textW.text = "Time: "..self.initTime
 			self.initTime = self.initTime - 1
-	    elseif (self.initTime == 0) then
-			
+			print(self.initTime) 							--debuggin
+	    elseif (self.initTime < 0) then
+			self:setStars_Qty(self.starsQty+1)
+			self.textStar.text = "Stars: "..self:getStars_Qty()
+			timer.cancel( event.source )
 		end
 	end
 	
-	timer.performWithDelay(500, listener, 61) 
+	timer.performWithDelay(self.timeSpeed, listener, 61) 
+	
+	timeGroup:insert(textW)	
+	
+	return timeGroup
 
 end
 

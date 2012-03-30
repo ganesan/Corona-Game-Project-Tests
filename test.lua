@@ -27,12 +27,23 @@ function scene:createScene( event )
 
 	local test_time = Level.Level:new()  -- Creating an instance of Level
 	
-	test_time:setTime(60)				-- initial value for the level timer
+	test_time:setTime(10)				-- initial value for the level timer
 	test_time:setStars_Qty(1)			-- initial value for the number of stars of the level
 	
 	local testing_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
-	local testing = test_time:displayTimer()  -- doing stuff with time at the level (debuggin purposes)
+	--local testing = test_time:displayTimer()  -- debuggin timer function
+	
+	--
+	textW = display.newText("Time: "..test_time:getTime(), 0,0, native.SystemFont, 14)		--another way to run timer independent of the interface
+	textW:setTextColor(255, 255, 255)
+	textW:setReferencePoint(display.CenterLeftReferencePoint)
+	textW.x = 20
+	textW.y = 20
+	
+	local testing = test_time:timerRun(textW)  -- using the real function for the level timer
+	--
+
 	
 	group:insert( testing_stars )
 	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
