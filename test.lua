@@ -28,9 +28,13 @@ function scene:createScene( event )
 	local test_time = Level.Level:new()  -- Creating an instance of Level
 	
 	test_time:setTime(60)				-- initial value for the level timer
+	test_time:setStars_Qty(1)			-- initial value for the number of stars of the level
 	
-	local testing = test_time:displayTimer()  -- doing stuff with time at the level (debuggin)
+	local testin_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
+	local testing = test_time:displayTimer()  -- doing stuff with time at the level (debuggin purposes)
+	
+	group:insert( testing_stars )
 	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
 end
 

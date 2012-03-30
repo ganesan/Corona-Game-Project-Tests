@@ -9,7 +9,7 @@ module(..., package.seeall)
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver}  
+Level = {initTime = 60, textObj, textTimeOver, starsQty = 0}  
 
 
 --********************************************************************************************************************************************************--
@@ -103,6 +103,13 @@ end
 
 --*************************************************************************************************************--
 
+
+--*************************************************************************************************************--
+--
+-- timerRun() -> Method to run a timed event, it goes from "initTime" value to 0
+--
+--*************************************************************************************************************--
+
 function Level:timerRun()
 
 	local function listener( event )
@@ -116,3 +123,61 @@ function Level:timerRun()
 	timer.performWithDelay(500, listener, 61) 
 
 end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- setStars_Qty(qty) -> Method to set the number of actual stars gotten in the level (if not set it is 0)
+-- @qty -> integer value with the quantity of stars
+--
+--*************************************************************************************************************--
+
+function Level:setStars_Qty(qty)
+
+	self.starsQty = qty
+
+end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- getStars_Qty() -> Method to get the number of actual stars gotten in the level
+-- @return -> integer value with the quantity of stars
+--
+--*************************************************************************************************************--
+
+function Level:setStars_Qty(qty)
+
+	return self.starsQty
+
+end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- displayStars_Qty() -> Method to get the number of actual stars gotten in the level
+-- @return -> returns a display group to display the number of stars in the screen
+--
+--*************************************************************************************************************--
+
+function Level:displayStars_Qty()
+
+	local starsGroup = display.newGroup()
+	
+		self.textObj = display.newText("Stars: "..self.starsQty, 0,0, native.SystemFont, 14)
+		self.textObj:setTextColor(255, 0, 255)
+		self.textObj:setReferencePoint(display.CenterLeftReferencePoint)
+		self.textObj.x = 160
+		self.textObj.y = 160
+	
+	return starsGroup
+
+end
+
+--*************************************************************************************************************--
