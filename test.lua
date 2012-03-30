@@ -28,7 +28,7 @@ function scene:createScene( event )
 	local test_time = Level.Level:new()  -- Creating an instance of Level
 	
 	test_time:setTime(10)				-- initial value for the level timer
-	test_time:setStars_Qty(1)			-- initial value for the number of stars of the level
+	test_time:setStars_Qty(0)			-- initial value for the number of stars of the level
 	
 	local testing_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
@@ -44,7 +44,7 @@ function scene:createScene( event )
 	local testing = test_time:timerRun(textW)  -- using the real function for the level timer
 	--
 	
-	local lvl_bg = test_time:generateLevel_bg(1)
+	local lvl_bg = test_time:generateLevel_bg(2) -- generate display of lvl (1)  
 	
 	group:insert( lvl_bg )	
 	group:insert( testing_stars )
