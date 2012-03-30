@@ -150,18 +150,18 @@ function Level:displayTimer()
 	self.textTimeOver:setTextColor(255, 255, 255)
 	
 	local function listener( event )
-	    if (self.initTime>-1) then
+	    if (self.initTime>=0) then
 			self.textObj.text = "Time: "..self.initTime
 			self.initTime = self.initTime - 1
 			print(self.initTime)
-	    elseif (self.initTime == -1) then
+	    elseif (self.initTime < 0) then
 			self.textTimeOver.text = "Time is Over!"						  -- debuggin purposes only
 			self:setStars_Qty(self.starsQty+1)
 			self.textStar.text = "Stars: "..self:getStars_Qty()
 		end
 	end
 	
-	timer.performWithDelay(self.timeSpeed, listener, 62) 
+	timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
 	
 	timeGroup:insert( self.textObj )
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
@@ -257,9 +257,9 @@ local levelBG = {
 					"levelBG/lvl1_bg3.png"
 					},
 					{
-					"levelBG/lvl1_bg1.png",
-					"levelBG/lvl1_bg2.png",
-					"levelBG/lvl1_bg3.png"
+					"levelBG/lvl2_bg1.png",
+					"levelBG/lvl2_bg2.png",
+					"levelBG/lvl2_bg3.png"
 					}						
 				}
 	
