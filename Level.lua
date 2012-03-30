@@ -2,6 +2,8 @@
 
 module(..., package.seeall)  
 
+-- include the Corona "storyboard" module to go next level when unlocked
+--local storyboard = require "storyboard"
 
 --****************************************************--
 --
@@ -270,5 +272,22 @@ local levelBG = {
 	levelBG_Group:insert(bg1)
 	
 	return levelBG_Group
+
+end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- unlockLevel() -> Method to unlock and save the state of level unlocked
+-- @lvl -> 
+-- @return -> 
+--
+--*************************************************************************************************************--
+
+function Level:unlockLevel(lvl) 
+
+	storyboard.gotoScene( lvl )
 
 end
