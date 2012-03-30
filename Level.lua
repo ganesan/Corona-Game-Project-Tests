@@ -12,7 +12,7 @@ module(..., package.seeall)
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={}} 
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={}, nextLvlLock = true} 
 
 
 --********************************************************************************************************************************************************--
@@ -272,6 +272,23 @@ local levelBG = {
 	levelBG_Group:insert(bg1)
 	
 	return levelBG_Group
+
+end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- checkLock() -> Method to check if the next level is locked or not in order to be able to play it or restart this one
+-- @lvl -> 
+-- @return -> 
+--
+--*************************************************************************************************************--
+
+function Level:checkLock() 
+
+	return self.nextLvlLock
 
 end
 

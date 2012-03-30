@@ -44,7 +44,7 @@ function scene:createScene( event )
 	local testing = test_time:timerRun(textW)  -- using the real function for the level timer
 	--
 	
-	local lvl_bg = test_time:generateLevel_bg(1) -- generate display of lvl (1)  
+	local lvl_bg = test_time:generateLevel_bg(2) -- generate display of lvl (1)  
 	
 	group:insert( lvl_bg )	
 	group:insert( testing_stars )
