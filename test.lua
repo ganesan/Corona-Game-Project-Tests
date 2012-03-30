@@ -30,7 +30,7 @@ function scene:createScene( event )
 	test_time:setTime(60)				-- initial value for the level timer
 	test_time:setStars_Qty(1)			-- initial value for the number of stars of the level
 	
-	local testin_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
+	local testing_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
 	local testing = test_time:displayTimer()  -- doing stuff with time at the level (debuggin purposes)
 	

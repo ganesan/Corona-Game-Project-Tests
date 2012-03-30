@@ -9,7 +9,7 @@ module(..., package.seeall)
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, starsQty = 0}  
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0}  
 
 
 --********************************************************************************************************************************************************--
@@ -81,22 +81,26 @@ function Level:displayTimer()
 	self.textObj.x = 20
 	self.textObj.y = 20
 	
-	self.textTimeOver = display.newText("", 20, 20, native.SystemFont, 20)    -- debuggin purposes only 
+	self.textTimeOver = display.newText("", 160, 20, native.SystemFont, 20)    -- debuggin purposes only 
 	self.textTimeOver:setTextColor(255, 255, 255)
 	
 	local function listener( event )
 	    if (self.initTime>-1) then
 			self.textObj.text = "Time: "..self.initTime
 			self.initTime = self.initTime - 1
-	    elseif (self.initTime == 0) then
+			print(self.initTime)
+	    elseif (self.initTime == -1) then
 			self.textTimeOver.text = "Time is Over!"						  -- debuggin purposes only
+			self:setStars_Qty(self.starsQty+1)
+			self.textStar.text = "Stars: "..self:getStars_Qty()
 		end
 	end
 	
-	timer.performWithDelay(500, listener, 61) 
+	timer.performWithDelay(500, listener, 62) 
 	
 	timeGroup:insert( self.textObj )
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
+	timeGroup:insert( self.textStar )
 	
 	return timeGroup
 end
@@ -150,7 +154,7 @@ end
 --
 --*************************************************************************************************************--
 
-function Level:setStars_Qty(qty)
+function Level:getStars_Qty(qty)
 
 	return self.starsQty
 
@@ -170,11 +174,11 @@ function Level:displayStars_Qty()
 
 	local starsGroup = display.newGroup()
 	
-		self.textObj = display.newText("Stars: "..self.starsQty, 0,0, native.SystemFont, 14)
-		self.textObj:setTextColor(255, 0, 255)
-		self.textObj:setReferencePoint(display.CenterLeftReferencePoint)
-		self.textObj.x = 160
-		self.textObj.y = 160
+		self.textStar = display.newText("Stars: "..self.starsQty, 0,0, native.SystemFont, 14)
+		self.textStar:setTextColor(255, 0, 255)
+		self.textStar:setReferencePoint(display.CenterLeftReferencePoint)
+		self.textStar.x = 160
+		self.textStar.y = 160
 	
 	return starsGroup
 
