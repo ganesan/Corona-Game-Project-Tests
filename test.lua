@@ -43,8 +43,10 @@ function scene:createScene( event )
 	
 	local testing = test_time:timerRun(textW)  -- using the real function for the level timer
 	--
-
 	
+	local lvl_bg = test_time:generateLevel_bg(1)
+	
+	group:insert( lvl_bg )	
 	group:insert( testing_stars )
 	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
 end
