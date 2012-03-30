@@ -1,0 +1,1 @@
+This is the git for testing Corona API, in order to use it in a real project
