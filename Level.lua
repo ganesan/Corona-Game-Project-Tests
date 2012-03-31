@@ -202,7 +202,7 @@ function Level:timerRun(textW)
 			self.textStar.text = "Stars: "..self:getStars_Qty()
 			timer.cancel( event.source )
 			if (self:getStars_Qty() > 0) then								-- debuggin level unlock
-				self.nextLvlLock = false
+				self.nextLvlLock = "false"
 			end
 		end
 	end
