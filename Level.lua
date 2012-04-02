@@ -3,7 +3,7 @@
 module(..., package.seeall)  
 
 -- include the Corona "storyboard" module to go next level when unlocked
-local storyboard = require "storyboard"
+storyboard = require "storyboard"
 
 --****************************************************--
 --
@@ -12,7 +12,7 @@ local storyboard = require "storyboard"
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={}, nextLvlLock = true} 
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={}, nextLvlLock = "true"} 
 
 
 --********************************************************************************************************************************************************--
@@ -203,6 +203,7 @@ function Level:timerRun(textW)
 			timer.cancel( event.source )
 			if (self:getStars_Qty() > 0) then								-- debuggin level unlock
 				self.nextLvlLock = "false"
+				timer.performWithDelay(1000,self:unlockLevel(2),1)			
 			end
 		end
 	end
@@ -306,8 +307,9 @@ end
 --
 --*************************************************************************************************************--
 
-function Level:unlockLevel(lvltogo) 
+function Level:unlockLevel(lvl) 
 
-	storyboard.gotoScene( lvltogo )
+	local gotolvl = "test"..lvl
+	storyboard.gotoScene(gotolvl)
 
 end

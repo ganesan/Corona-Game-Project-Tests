@@ -45,11 +45,7 @@ function scene:createScene( event )
 	--
 	
 	local lvl_bg = test_time:generateLevel_bg(1) -- generate display of lvl (1)  
-	
-	if (test_time:checkLock() == "false") then
-		storyboard.gotoScene( "test2" )
-		--test_time:unlockLevel("test2")
-	end
+
 	
 	group:insert( lvl_bg )	
 	group:insert( testing_stars )
