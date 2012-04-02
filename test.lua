@@ -70,7 +70,7 @@ function scene:exitScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
-
+	--Runtime:removeEventListener("tap", myListener)
 	physics.stop()
 	
 end

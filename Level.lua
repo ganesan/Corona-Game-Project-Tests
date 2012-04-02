@@ -200,7 +200,7 @@ function Level:timerRun(textW)
 			self.textTimeOver.text = "Time is Over!"						  -- debuggin purposes only
 			self:setStars_Qty(self.starsQty+1)
 			self.textStar.text = "Stars: "..self:getStars_Qty()
-			timer.cancel( gametime )
+			timer.cancel( event.source )
 			if (self:getStars_Qty() > 0) then								-- debuggin level unlock
 				self.nextLvlLock = "false"
 				timer.performWithDelay(1000,self:unlockLevel(2),1)			
@@ -209,20 +209,6 @@ function Level:timerRun(textW)
 	end
 	gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
 	
-	local myListener = function( event ) 								-- pause for 5secs when tap screen(will be changed to when clock superpower is gotten)
-			
-			if (result==nil or event.numTaps==2) then
-				result = timer.pause(gametime)
-				print (result)
-			elseif (result~=nil and event.numTaps==1) then
-				--result = timer.resume(gametime)
-				result = timer.performWithDelay(5000, timer.resume(gametime), 1)
-				--result = nil
-			end
-
-	end 
-	Runtime:addEventListener( "tap", myListener )
-
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
 	timeGroup:insert(textW)	
 	
