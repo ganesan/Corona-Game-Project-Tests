@@ -5,6 +5,9 @@ module(..., package.seeall)
 -- include the Corona "storyboard" module to go next level when unlocked
 storyboard = require "storyboard"
 
+-- include Corona's "physics" library
+--local physics = require "physics"
+
 --****************************************************--
 --
 -- Initialization of Parameters for our Level class
@@ -12,7 +15,7 @@ storyboard = require "storyboard"
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_bg3.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png", "levelBG/lvl2_bg3.png"}}, nextLvlLock = "true",  screenW = display.contentWidth, screenH = display.contentHeight, halfW = display.contentWidth*0.5} 
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_bg3.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png", "levelBG/lvl2_bg3.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
 
 
 --********************************************************************************************************************************************************--
@@ -108,6 +111,14 @@ function Level:setLevelSpeed(levelSpeed)
 
 	self.levelSpeed = levelSpeed
 
+	if (self.levelSpeed==1) then
+		self.timeSpeed = 1500
+	elseif (self.levelSpeed==2) then
+		self.timeSpeed = 1000
+	elseif (self.levelSpeed==3) then
+		self.timeSpeed = 500
+	end
+	
 end
 
 --**********************************************************************************************************************************--
@@ -181,7 +192,7 @@ function Level:timerRun(textW)
 	local function listener( event )
 	    if (self.initTime >= 0) then
 			textW.text = "Time: "..self.initTime
-			print(self.initTime) 											  -- debuggin
+			--print(self.initTime) 											  -- debuggin
 			self.initTime = self.initTime - 1
 	    elseif (self.initTime < 0) then
 			self.textTimeOver.text = "Time is Over!"						  -- debuggin purposes only
@@ -194,7 +205,7 @@ function Level:timerRun(textW)
 			end
 		end
 	end
-	
+	print (self.timeSpeed)
 	timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
 	
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
@@ -307,7 +318,7 @@ function Level:createLevel(lbg1, lbg2, lgrd1, lgrd2)
 
 	local levelGroup = display.newGroup()
 
-	local bgSpeed = self.levelSpeed; --  speed to move the backgrounds at
+	local bgSpeed = self.levelSpeed*-2; --  speed to move the backgrounds at
  
 	local bg1 = display.newImage( lbg1, 0, 0 ); -- place bg1 at the origin
 	--bg1:setReferencePoint( display.TopLeftReferencePoint )
@@ -319,17 +330,20 @@ function Level:createLevel(lbg1, lbg2, lgrd1, lgrd2)
 	--grass2:setReferencePoint( display.BottomLeftReferencePoint )
 	
 	local moveBG = function(event)
-	   bg1:translate(bgSpeed, 0); -- move bg1 bgSpeed on the x plane
-	   bg2:translate(bgSpeed, 0); -- move bg2 bgSpeed on the x plane
-	   grass1:translate(bgSpeed, 0);
-	   grass2:translate(bgSpeed, 0);
-	   
-	   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then
-		  bg2.x = bg1.x + bg1.width;
-		  grass2.x = grass1.x + grass1.width;
-	   elseif((bg2.x + bg2.width / 2) < display.contentWidth and (bg2.x + bg2.width / 2) > 0) then
-		  bg1.x = bg2.x + bg2.width;
-		  grass1.x = grass2.x + grass2.width;
+	   if (self.initTime>=0) then
+		   bg1:translate(bgSpeed, 0); -- move bg1 bgSpeed on the x plane
+		   bg2:translate(bgSpeed, 0); -- move bg2 bgSpeed on the x plane
+		   grass1:translate(bgSpeed, 0);
+		   grass2:translate(bgSpeed, 0);
+		   
+		   
+		   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then
+			  bg2.x = bg1.x + bg1.width;
+			  grass2.x = grass1.x + grass1.width;
+		   elseif((bg2.x + bg2.width / 2) < display.contentWidth and (bg2.x + bg2.width / 2) > 0) then
+			  bg1.x = bg2.x + bg2.width;
+			  grass1.x = grass2.x + grass2.width;
+		   end
 	   end
 	end
 	

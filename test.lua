@@ -7,6 +7,10 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
+-- include Corona's "physics" library
+local physics = require "physics"
+physics.start(); physics.pause()
+
 -- include Corona's "widget" library (menu interface, buttons, scrollviews and that kind of stuff)
 local widget = require "widget"
 
@@ -39,12 +43,14 @@ function scene:createScene( event )
 	textW.x = 20
 	textW.y = 20
 	
-	local testing = test_level:timerRun(textW)  --start level timer
+	
 	--
+	test_level:setLevelSpeed(1)
 	
 	--local lvl_bg = test_level:getBG(1) -- generate display of lvl (1)  
-	local level_bg = test_level:createLevel("levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png") --
+	local lvl_bg = test_level:createLevel("levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png") --
 
+	local testing = test_level:timerRun(textW)  --start level timer
 	
 	group:insert( lvl_bg )	
 	group:insert( testing_stars )
@@ -56,6 +62,7 @@ function scene:enterScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
+	physics.start()
 	
 end
 
@@ -64,14 +71,18 @@ function scene:exitScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
+
+	physics.stop()
 	
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-	
 
+	package.loaded[physics] = nil
+	physics = nil
+	
 end
 
 -----------------------------------------------------------------------------------------
