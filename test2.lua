@@ -48,8 +48,7 @@ function scene:createScene( event )
 	
 	test_level:setLevelSpeed(2)	
 	
-	--local lvl_bg = test_level:getBG(2) -- generate display of lvl (2)  
-	local lvl_bg = test_level:createLevel("levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png", "levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png")
+	local lvl_bg = test_level:createLevel(2,2)
 
 	
 	group:insert( lvl_bg )	

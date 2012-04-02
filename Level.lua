@@ -15,7 +15,7 @@ storyboard = require "storyboard"
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_bg3.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png", "levelBG/lvl2_bg3.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
+Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
 
 
 --********************************************************************************************************************************************************--
@@ -117,6 +117,8 @@ function Level:setLevelSpeed(levelSpeed)
 		self.timeSpeed = 1000
 	elseif (self.levelSpeed==3) then
 		self.timeSpeed = 500
+	elseif (self.levelSpeed==0) then
+		self.timeSpeed = 0
 	end
 	
 end
@@ -205,8 +207,18 @@ function Level:timerRun(textW)
 			end
 		end
 	end
-	print (self.timeSpeed)
-	timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
+	local gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
+	local result = nil
+	
+	local myListener = function( event ) 								-- pause for 5secs when tap screen(will be changed to when clock superpower is gotten)
+			
+			if (result==nil) then
+				result = timer.pause(gametime)
+				timer.performWithDelay(self.pauseTime, timer.resume(gametime), 1)		
+			end
+		
+	end 
+	Runtime:addEventListener( "tap", myListener )
 	
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
 	timeGroup:insert(textW)	
@@ -244,26 +256,44 @@ end
 
 --*************************************************************************************************************--
 --
--- generateLevel_bg() -> Method to generate random level backgrounds                      
+-- getBGSet() -> Method to get the set for the level backgrounds                      
 -- @lvl -> level set to use
--- @return -> levelBG_Group display object with the level backgrounds (remove this later when level animation method is implemented, will only need the set)
--- @return -> lvlSet Array with the set of backgrounds to use
+-- @return -> lvlBG_Group Array with the set of backgrounds to use
 --
 --*************************************************************************************************************--
 
-function Level:getBG(lvl)
+function Level:getBGSet(lvl)
 
-	local levelBG_Group = display.newGroup()
+	local levelBG_Group = {}
 	
-	local rnd_BG = math.random(1, 3)									-- remove because there is no point on having randomized background positions, because positions must be static in order to have good unions between bgs and look good
-	
-	local bg1 = display.newImage(self.levelBG[lvl][rnd_BG], 0, 0)			-- testing
-	
-	levelBG_Group:insert(bg1)
+	for key, value in pairs(self.levelBG[lvl]) do 
+		table.insert(levelBG_Group, value)
+	end
 	
 	return levelBG_Group
+	
+end
 
-	--return array with the background set to use here
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- getFloorSet() -> Method to get the set for the floor tile                 
+-- @lvl -> level set to use
+-- @return -> lvlFloor_Group Array with the set of backgrounds to use
+--
+--*************************************************************************************************************--
+
+function Level:getFloorSet(lvl)
+
+	local levelFloor_Group = {}
+	
+	for key, value in pairs(self.levelFloor[lvl]) do 
+		table.insert(levelFloor_Group, value)
+	end
+	
+	return levelFloor_Group
 	
 end
 
@@ -308,17 +338,26 @@ end
 
 --*************************************************************************************************************--
 --
--- createLevel() -> Method to create the Level with its animation (camera moving)                   ------WORK ON THIS
+-- createLevel() -> Method to create the Level with its animation (camera moving)                   ------WORK ON THIS (2 sequencial images as it is now, should be 3? or 2 is ok?)
 -- @
 -- @
 --
 --*************************************************************************************************************--
 
-function Level:createLevel(lbg1, lbg2, lgrd1, lgrd2)
+function Level:createLevel(lvlset, floorset)
 
+	local levelBGSet = self:getBGSet(lvlset)
+	local levelFloorSet = self:getFloorSet(floorset)
+	
+	lbg1 = levelBGSet[1]
+	lbg2 = levelBGSet[2]
+	
+	lgrd1 = levelFloorSet[1]
+	lgrd2 = levelFloorSet[2]
+	
 	local levelGroup = display.newGroup()
 
-	local bgSpeed = self.levelSpeed*-2; --  speed to move the backgrounds at
+	--local bgSpeed = self.levelSpeed*-2; --  speed to move the backgrounds at
  
 	local bg1 = display.newImage( lbg1, 0, 0 ); -- place bg1 at the origin
 	--bg1:setReferencePoint( display.TopLeftReferencePoint )
@@ -331,10 +370,10 @@ function Level:createLevel(lbg1, lbg2, lgrd1, lgrd2)
 	
 	local moveBG = function(event)
 	   if (self.initTime>=0) then
-		   bg1:translate(bgSpeed, 0); -- move bg1 bgSpeed on the x plane
-		   bg2:translate(bgSpeed, 0); -- move bg2 bgSpeed on the x plane
-		   grass1:translate(bgSpeed, 0);
-		   grass2:translate(bgSpeed, 0);
+		   bg1:translate(self.levelSpeed*-2, 0); -- move bg1 bgSpeed on the x plane
+		   bg2:translate(self.levelSpeed*-2, 0); -- move bg2 bgSpeed on the x plane
+		   grass1:translate(self.levelSpeed*-2, 0);
+		   grass2:translate(self.levelSpeed*-2, 0);
 		   
 		   
 		   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then

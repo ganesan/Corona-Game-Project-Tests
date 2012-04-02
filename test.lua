@@ -45,10 +45,9 @@ function scene:createScene( event )
 	
 	
 	--
-	test_level:setLevelSpeed(1)
+	test_level:setLevelSpeed(2)
 	
-	--local lvl_bg = test_level:getBG(1) -- generate display of lvl (1)  
-	local lvl_bg = test_level:createLevel("levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png", "levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png") --
+	local lvl_bg = test_level:createLevel(1,1) --
 
 	local testing = test_level:timerRun(textW)  --start level timer
 	
