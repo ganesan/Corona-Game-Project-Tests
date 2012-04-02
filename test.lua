@@ -7,6 +7,10 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
+-- include Corona's "physics" library
+local physics = require "physics"
+physics.start(); physics.pause()
+
 -- include Corona's "widget" library (menu interface, buttons, scrollviews and that kind of stuff)
 local widget = require "widget"
 
@@ -25,27 +29,27 @@ local Level = require("Level")
 function scene:createScene( event )
 	local group = self.view
 
-	local test_time = Level.Level:new()  -- Creating an instance of Level
+	local test_level = Level.Level:new()  -- Creating an instance of Level
 	
-	test_time:setTime(10)				-- initial value for the level timer
-	test_time:setStars_Qty(0)			-- initial value for the number of stars of the level
+	test_level:setTime(10)				-- initial value for the level timer
+	test_level:setStars_Qty(0)			-- initial value for the number of stars
 	
-	local testing_stars = test_time:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
-	
-	--local testing = test_time:displayTimer()  -- debuggin timer function
+	local testing_stars = test_level:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
 	--
-	textW = display.newText("Time: "..test_time:getTime(), 0,0, native.SystemFont, 14)		--another way to run timer independent of the interface
+	textW = display.newText("Time: "..test_level:getTime(), 0,0, native.SystemFont, 14)		--ui for timer
 	textW:setTextColor(255, 255, 255)
 	textW:setReferencePoint(display.CenterLeftReferencePoint)
 	textW.x = 20
 	textW.y = 20
 	
-	local testing = test_time:timerRun(textW)  -- using the real function for the level timer
-	--
 	
-	local lvl_bg = test_time:generateLevel_bg(1) -- generate display of lvl (1)  
+	--
+	test_level:setLevelSpeed(2)
+	
+	local lvl_bg = test_level:createLevel(1,1) --
 
+	local testing = test_level:timerRun(textW)  --start level timer
 	
 	group:insert( lvl_bg )	
 	group:insert( testing_stars )
@@ -57,6 +61,7 @@ function scene:enterScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
+	physics.start()
 	
 end
 
@@ -65,14 +70,18 @@ function scene:exitScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
+
+	physics.stop()
 	
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-	
 
+	package.loaded[physics] = nil
+	physics = nil
+	
 end
 
 -----------------------------------------------------------------------------------------
