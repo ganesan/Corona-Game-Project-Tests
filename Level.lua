@@ -214,7 +214,6 @@ function Level:timerRun(textW)
 			
 			if (result==nil) then
 				result = timer.pause(gametime)
-				timer.performWithDelay(self.pauseTime, timer.resume(gametime), 1)		
 			end
 		
 	end 
