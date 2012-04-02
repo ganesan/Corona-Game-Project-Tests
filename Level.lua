@@ -15,7 +15,7 @@ storyboard = require "storyboard"
 --
 --****************************************************--
 
-Level = {initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
+Level = {result = nil, gametime = nil, initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
 
 
 --********************************************************************************************************************************************************--
@@ -194,31 +194,35 @@ function Level:timerRun(textW)
 	local function listener( event )
 	    if (self.initTime >= 0) then
 			textW.text = "Time: "..self.initTime
-			--print(self.initTime) 											  -- debuggin
+			print(self.initTime) 											  -- debuggin
 			self.initTime = self.initTime - 1
 	    elseif (self.initTime < 0) then
 			self.textTimeOver.text = "Time is Over!"						  -- debuggin purposes only
 			self:setStars_Qty(self.starsQty+1)
 			self.textStar.text = "Stars: "..self:getStars_Qty()
-			timer.cancel( event.source )
+			timer.cancel( gametime )
 			if (self:getStars_Qty() > 0) then								-- debuggin level unlock
 				self.nextLvlLock = "false"
 				timer.performWithDelay(1000,self:unlockLevel(2),1)			
 			end
 		end
 	end
-	local gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
-	local result = nil
+	gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
 	
 	local myListener = function( event ) 								-- pause for 5secs when tap screen(will be changed to when clock superpower is gotten)
-			
-			if (result==nil) then
+			print("clicked")
+			print (result)
+			if (result==nil or event.numTaps==2) then
 				result = timer.pause(gametime)
+			elseif (result~=nil and event.numTaps==1) then
+				result = timer.resume(gametime)
+				result = nil
 			end
+
 		
 	end 
 	Runtime:addEventListener( "tap", myListener )
-	
+
 	timeGroup:insert( self.textTimeOver )									  -- debuggin purposes only
 	timeGroup:insert(textW)	
 	

@@ -29,26 +29,26 @@ local Level = require("Level")
 function scene:createScene( event )
 	local group = self.view
 
-	local test_level = Level.Level:new()  -- Creating an instance of Level
+	local test_level2 = Level.Level:new()  -- Creating an instance of Level
 	
-	test_level:setTime(10)				-- initial value for the level timer
-	test_level:setStars_Qty(0)			-- initial value for the number of stars
+	test_level2:setTime(10)				-- initial value for the level timer
+	test_level2:setStars_Qty(0)			-- initial value for the number of stars
 	
-	local testing_stars = test_level:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
+	local testing_stars = test_level2:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
 	--
-	textW = display.newText("Time: "..test_level:getTime(), 0,0, native.SystemFont, 14)		--ui for timer
+	textW = display.newText("Time: "..test_level2:getTime(), 0,0, native.SystemFont, 14)		--ui for timer
 	textW:setTextColor(255, 255, 255)
 	textW:setReferencePoint(display.CenterLeftReferencePoint)
 	textW.x = 20
 	textW.y = 20
 	
-	local testing = test_level:timerRun(textW)  --start level timer
+	local testing = test_level2:timerRun(textW)  --start level timer
 	--
 	
-	test_level:setLevelSpeed(2)	
+	test_level2:setLevelSpeed(2)	
 	
-	local lvl_bg = test_level:createLevel(2,2)
+	local lvl_bg = test_level2:createLevel(2,2)
 
 	
 	group:insert( lvl_bg )	
