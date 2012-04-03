@@ -25,8 +25,8 @@ function Player:spawn_player()
 	sprite.add( spriteSet2, "man", 1, 2, 200, 0 ) -- 
 
 	local instance2 = sprite.newSprite( spriteSet2 )
-	instance2.x = 160
-	instance2.y = 160
+	instance2.x = 120
+	instance2.y = 280
 
 	instance2:prepare("man")
 	instance2:play()
@@ -38,7 +38,7 @@ function Player:spawn_player()
 	
 	playerGroup:insert( instance2 )
 	
-	--self:player_jump( instance2 )
+	self:player_jump( instance2 )
 	
 	return playerGroup
 
