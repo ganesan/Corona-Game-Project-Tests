@@ -32,12 +32,31 @@ function scene:createScene( event )
 	local test_level = Level.Level:new()  -- Creating an instance of Level
 	
 	local testing = test_level:initLevel(10, 2, 0, 1, 1)
+	--test_level:setTime(10)				-- initial value for the level timer
+	--test_level:setStars_Qty(0)			-- initial value for the number of stars
+	--test_level:setLevelSpeed(2)			-- initial value for the level speed (it affects time speed)
+
+	--local testing_stars = test_level:displayStars_Qty()	-- showing number of stars in screen (debuggin purposes)
 	
 	print("Total Time: "..test_level:getTime())
 	print("Stars: "..test_level:getStars_Qty())
 	print("Level Speed: "..test_level:getLevelSpeed())
 	print("Timer Speed: "..test_level:getTimeSpeed().."ms")
 
+	--local teststuff = test_level:startTimer()
+
+	--[[textW = display.newText("Time: "..actual_time, 0,0, native.SystemFont, 14)		--ui for timer
+	textW:setTextColor(255, 255, 255)
+	textW:setReferencePoint(display.CenterLeftReferencePoint)
+	textW.x = 20
+	textW.y = 20]]--
+	
+	--local lvl_bg = test_level:createLevel(1,1) --
+
+	--local testing = test_level:timerRun(textW)  --start level timer
+	
+	--group:insert( lvl_bg )	
+	--group:insert( testing_stars )
 	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
 end
 

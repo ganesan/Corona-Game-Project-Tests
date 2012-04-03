@@ -2,12 +2,6 @@
 
 module(..., package.seeall)  
 
--- include the Corona "storyboard" module to go next level when unlocked
-storyboard = require "storyboard"
-
--- include Corona's "physics" library
---local physics = require "physics"
-
 --****************************************************--
 --
 -- Initialization of Parameters for our Level class
@@ -362,24 +356,20 @@ function Level:createLevel(lvlset, floorset)
 	local levelBGSet = self:getBGSet(lvlset)
 	local levelFloorSet = self:getFloorSet(floorset)
 	
-	lbg1 = levelBGSet[1]
-	lbg2 = levelBGSet[2]
+	local lbg1 = levelBGSet[1]
+	local lbg2 = levelBGSet[2]
 	
-	lgrd1 = levelFloorSet[1]
-	lgrd2 = levelFloorSet[2]
+	local lgrd1 = levelFloorSet[1]
+	local lgrd2 = levelFloorSet[2]
 	
 	local levelGroup = display.newGroup()
-
-	--local bgSpeed = self.levelSpeed*-2; --  speed to move the backgrounds at
  
 	local bg1 = display.newImage( lbg1, 0, 0 ); -- place bg1 at the origin
-	--bg1:setReferencePoint( display.TopLeftReferencePoint )
 	local bg2 = display.newImage( lbg2, bg1.x + (bg1.width * 1.5), 0); -- place bg2 right after bg1
-	--bg2:setReferencePoint( display.TopLeftReferencePoint )
+
 	local grass1 = display.newImage( lgrd1, 0, 244 )
-	--grass1:setReferencePoint( display.BottomLeftReferencePoint )
 	local grass2 = display.newImage( lgrd2, grass1.x + (grass1.width*1.5), 244 )
-	--grass2:setReferencePoint( display.BottomLeftReferencePoint )
+
 	
 	local moveBG = function(event)
 	   if (self.initTime>=0) then
@@ -414,4 +404,33 @@ function Level:createLevel(lvlset, floorset)
 	
 	return levelGroup
 	
+end
+
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- initLevel() -> 
+-- @
+-- @
+-- @
+-- @
+-- @
+--
+--*************************************************************************************************************--
+
+function Level:initLevel( lvltime, lvlspeed, lvlstars, lvlbgset, lvlgrdset )
+	local displaylvl = display.newGroup()
+
+		self:setTime(lvltime)
+		self:setLevelSpeed(lvlspeed)
+		self:setStars_Qty(lvlstars)
+
+		self:startTimer()
+
+		displaylvl:insert(self:createLevel(lvlbgset, lvlgrdset))
+
+	return displaylvl
 end
