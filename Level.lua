@@ -434,3 +434,5 @@ function Level:initLevel( lvltime, lvlspeed, lvlstars, lvlbgset, lvlgrdset )
 
 	return displaylvl
 end
+
+--*************************************************************************************************************--

@@ -1,22 +1,15 @@
 -----------------------------------------------------------------------------------------
 --
--- test.lua
+-- menu.lua
 --
 -----------------------------------------------------------------------------------------
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
--- include Corona's "physics" library
-local physics = require "physics"
-physics.start(); physics.pause()
-
 -- include Corona's "widget" library (menu interface, buttons, scrollviews and that kind of stuff)
 local widget = require "widget"
 
--- including the module for the "class" level
-local Level = require("Level")
-local player_spawn = require( "Player" )
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -27,23 +20,35 @@ local player_spawn = require( "Player" )
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
+	
 	local group = self.view
-	
-	local test_level = Level.Level:new()  -- Creating an instance of Level
-	local player = player_spawn.Player:new()
-	local testing = test_level:initLevel(10, 2, 0, 1, 1)
-	local player_created = player:spawn_player()
 
-	print("Total Time: "..test_level:getTime())
-	print("Stars: "..test_level:getStars_Qty())
-	print("Level Speed: "..test_level:getLevelSpeed())
-	print("Timer Speed: "..test_level:getTimeSpeed().."ms")
-	--display.getInfo("textureMemoryUsed")
-	
-	--physics.setDrawMode( "hybrid" )
+	local gameText = display.newText("GoGo's Game", 132, 100, native.systemFont, 32)
+ 
+    local onButtonEvent = function (event )
+        if event.phase == "release" then
+            storyboard.gotoScene( "test" )
+        end
+    end
+ 
+    local myButton = widget.newButton{
+        id = "btn001",
+        left = 160,
+        top = 160,
+        label = "Start",
+        width = 150, height = 32,
+        cornerRadius = 8,
+        onEvent = onButtonEvent
+    }
 
-	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
-	group:insert( player_created )
+    -- Insert button into a group:
+    group:insert( myButton.view )
+
+    -- Change the button's label text:
+    myButton:setLabel( "Start the Game" )
+
+ 	group:insert( gameText )
+
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -51,7 +56,6 @@ function scene:enterScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-	physics.start()
 	
 end
 
@@ -60,17 +64,14 @@ function scene:exitScene( event )
 	local group = self.view
 	
 	-- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
-	physics.stop()
 	
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-
-	package.loaded[physics] = nil
-	physics = nil
-	
+	myButton:removeSelf()
+    myButton = nil
 end
 
 -----------------------------------------------------------------------------------------
