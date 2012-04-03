@@ -177,7 +177,7 @@ end
 
 --*************************************************************************************************************--
 --
--- timerRun(textW) -> Method to run a timed event, it goes from "initTime" value to 0
+-- timerRun(textW) -> Method to run a timed event, it goes from "initTime" value to 0 and shows it off on screen
 -- @textW -> text that displays the count down, in order to update it each second we get it here and send it back as a display group
 -- @return -> display group with the interface text updating each second
 --
@@ -213,6 +213,30 @@ function Level:timerRun(textW)
 	timeGroup:insert(textW)	
 	
 	return timeGroup
+
+end
+
+--*************************************************************************************************************--
+
+
+--*************************************************************************************************************--
+--
+-- startTimer() -> Method to run a timed event, it goes from "initTime" value to 0
+--
+--*************************************************************************************************************--
+
+function Level:startTimer()
+
+	local function listener( event )
+	    if (self.initTime >= 0) then
+			print(self.initTime) 											  -- debuggin
+			self.initTime = self.initTime - 1 								
+	    elseif (self.initTime < 0) then
+	    	print("time is over!")											  -- debuggin
+			timer.cancel( event.source )
+		end
+	end
+	gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
 
 end
 
