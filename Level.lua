@@ -2,6 +2,8 @@
 
 module(..., package.seeall)  
 
+require "sprite"
+
 --****************************************************--
 --
 -- Initialization of Parameters for our Level class
@@ -9,8 +11,10 @@ module(..., package.seeall)
 --
 --****************************************************--
 
-Level = {result = nil, gametime = nil, initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
+local Player = require("Player")
+local player = Player.Player:new()
 
+Level = {result = nil, gametime = nil, initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
 
 --********************************************************************************************************************************************************--
 --
@@ -228,6 +232,7 @@ function Level:startTimer()
 	    elseif (self.initTime < 0) then
 	    	print("time is over!")											  -- debuggin
 			timer.cancel( event.source )
+			player:pause()
 		end
 	end
 	gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
@@ -364,19 +369,27 @@ function Level:createLevel(lvlset, floorset)
 	
 	local levelGroup = display.newGroup()
  
+
+	local myRectangle = display.newRect(330, 240, 150, 50)
+	myRectangle.rotation = -15
+	myRectangle.strokeWidth = 2
+	myRectangle:setFillColor(140, 140, 140)
+	myRectangle:setStrokeColor(180, 180, 180)
+
+
 	local bg1 = display.newImage( lbg1, 0, 0 ); -- place bg1 at the origin
 	local bg2 = display.newImage( lbg2, bg1.x + (bg1.width * 1.5), 0); -- place bg2 right after bg1
 
 	local grass1 = display.newImage( lgrd1, 0, 244 )
 	local grass2 = display.newImage( lgrd2, grass1.x + (grass1.width*1.5), 244 )
 
-	
 	local moveBG = function(event)
 	   if (self.initTime>=0) then
 		   bg1:translate(self.levelSpeed*-2, 0); -- move bg1 bgSpeed on the x plane
 		   bg2:translate(self.levelSpeed*-2, 0); -- move bg2 bgSpeed on the x plane
 		   grass1:translate(self.levelSpeed*-2, 0);
 		   grass2:translate(self.levelSpeed*-2, 0);
+		   myRectangle:translate(self.levelSpeed*-2, 0)
 		   
 		   
 		   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then
@@ -393,15 +406,18 @@ function Level:createLevel(lvlset, floorset)
 	
 	local groundShape = { -self.halfW,-21, self.halfW,-21, self.halfW,21, -self.halfW,21 }
 	
+	--local obstacleShape = { 0, 41, 0,81, 200,80, 200,80 }
+
 	physics.addBody( grass1, "static", { friction=1.0, density=1.0, bounce=0, shape=groundShape } )
 	physics.addBody( grass2, "static", { friction=1.0, density=1.0, bounce=0, shape=groundShape } )
-	
+	physics.addBody( myRectangle, "static", { friction=0.5, density=1.0, bounce=0.1, shape=obstacleShape } )
 	
 	levelGroup:insert( bg1 )
 	levelGroup:insert( bg2 )
 	levelGroup:insert( grass1 )
 	levelGroup:insert( grass2 )
-	
+	levelGroup:insert( myRectangle )
+
 	return levelGroup
 	
 end
@@ -428,9 +444,12 @@ function Level:initLevel( lvltime, lvlspeed, lvlstars, lvlbgset, lvlgrdset )
 		self:setLevelSpeed(lvlspeed)
 		self:setStars_Qty(lvlstars)
 
+		local player_created = player:spawn_player()
+
 		self:startTimer()
 
 		displaylvl:insert(self:createLevel(lvlbgset, lvlgrdset))
+		displaylvl:insert(player_created)
 
 	return displaylvl
 end

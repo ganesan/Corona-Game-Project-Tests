@@ -2,7 +2,7 @@ module(..., package.seeall)
 
 require "sprite"
 
-Player = {life=3}
+Player = {life=3, instance2}
 
 function Player:new(o)
 
@@ -24,16 +24,17 @@ function Player:spawn_player()
 	local spriteSet2 = sprite.newSpriteSet(sheet2, 1, 2)
 	sprite.add( spriteSet2, "man", 1, 2, 200, 0 ) -- 
 
-	local instance2 = sprite.newSprite( spriteSet2 )
+	instance2 = sprite.newSprite( spriteSet2 )
 	instance2.x = 120
 	instance2.y = 280
+	instance2.rotation = 0
 
 	instance2:prepare("man")
 	instance2:play()
 	--
 	
 	-- adding physics to the dummy player
-	physics.addBody( instance2, { density=1.0, friction=0.3, bounce=0.3 } )
+	physics.addBody( instance2, { density=1.0, friction=1.0, bounce=0 } )
 	instance2.MyName="player"
 	
 	playerGroup:insert( instance2 )
@@ -58,8 +59,10 @@ function Player:player_jump(player)
 
 end
 
-function Player:remove_life()
+function Player:pause()
 
-	
+	self.instance2:pause()
+
+	return
 
 end

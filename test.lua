@@ -16,7 +16,6 @@ local widget = require "widget"
 
 -- including the module for the "class" level
 local Level = require("Level")
-local player_spawn = require( "Player" )
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -30,9 +29,9 @@ function scene:createScene( event )
 	local group = self.view
 	
 	local test_level = Level.Level:new()  -- Creating an instance of Level
-	local player = player_spawn.Player:new()
+	
 	local testing = test_level:initLevel(10, 2, 0, 1, 1)
-	local player_created = player:spawn_player()
+
 
 	print("Total Time: "..test_level:getTime())
 	print("Stars: "..test_level:getStars_Qty())
@@ -40,10 +39,10 @@ function scene:createScene( event )
 	print("Timer Speed: "..test_level:getTimeSpeed().."ms")
 	--display.getInfo("textureMemoryUsed")
 	
-	--physics.setDrawMode( "hybrid" )
+	physics.setDrawMode( "hybrid" )
 
 	group:insert( testing )	-- inserting elements into the group of the scene,  (note-self: must insert .view property for widgets)
-	group:insert( player_created )
+
 end
 
 -- Called immediately after scene has moved onscreen:
