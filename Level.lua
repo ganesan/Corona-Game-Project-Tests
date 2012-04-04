@@ -398,10 +398,9 @@ function Level:createLevel(lvlset, floorset)
 		   	player.instance2.x = player.initXpos
 		   end
 
-		   if (player.instance2.rotation < -15 or player.instance2.rotation > 15) then
+		   if (player.instance2.rotation < -16 or player.instance2.rotation > 16) then
 		   		player.instance2.rotation = 0
 		   end
-		   
 
 		   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then
 			  bg2.x = bg1.x + bg1.width;
