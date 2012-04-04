@@ -232,7 +232,7 @@ function Level:startTimer()
 	    elseif (self.initTime < 0) then
 	    	print("time is over!")											  -- debuggin
 			timer.cancel( event.source )
-			player:pause()
+			player:pauses()
 		end
 	end
 	gametime = timer.performWithDelay(self.timeSpeed, listener, self.initTime+2) 
