@@ -444,9 +444,8 @@ function Level:initLevel( lvltime, lvlspeed, lvlstars, lvlbgset, lvlgrdset )
 		self:setLevelSpeed(lvlspeed)
 		self:setStars_Qty(lvlstars)
 
-		local player_created = player:spawn_player()
-
 		self:startTimer()
+		local player_created = player:spawn_player()
 
 		displaylvl:insert(self:createLevel(lvlbgset, lvlgrdset))
 		displaylvl:insert(player_created)

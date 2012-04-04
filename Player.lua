@@ -15,6 +15,14 @@ function Player:new(o)
 	
 end
 
+function Player:setSpriteInstance(spriteSet)
+	self.instance2 = sprite.newSprite( spriteSet )
+end
+
+function Player:getSpriteInstance()
+	return self.instance2
+end
+
 function Player:spawn_player()
 
 	local playerGroup = display.newGroup()
@@ -24,32 +32,29 @@ function Player:spawn_player()
 	local spriteSet2 = sprite.newSpriteSet(sheet2, 1, 2)
 	sprite.add( spriteSet2, "man", 1, 2, 200, 0 ) -- 
 
-	instance2 = sprite.newSprite( spriteSet2 )
-	instance2.x = 120
-	instance2.y = 280
-	instance2.rotation = 0
+	self:setSpriteInstance(spriteSet2)
+	
+	self.instance2.x = 120
+	self.instance2.y = 280
+	self.instance2.rotation = 0
 
-	instance2:prepare("man")
-	instance2:play()
+	self.instance2:prepare("man")
+	self.instance2:play()
 	--
 	
 	-- adding physics to the dummy player
-	physics.addBody( instance2, { density=1.0, friction=1.0, bounce=0 } )
-	instance2.MyName="player"
+	physics.addBody( self.instance2, { density=1.0, friction=1.0, bounce=0 } )
+	self.instance2.MyName="player"
 	
-	playerGroup:insert( instance2 )
+	playerGroup:insert( self.instance2 )
 	
-	self:player_jump( instance2 )
+	self:player_jump( self.instance2 )
 	
 	return playerGroup
 
 end
 
 function Player:player_jump(player)
-
-	----------------------
-	-- Player animations
-	----------------------
 	
 	function player_jumps(event)
 			player:setLinearVelocity(0, -150)
@@ -59,9 +64,16 @@ function Player:player_jump(player)
 
 end
 
-function Player:pause()
+function Player:pauses()
 
-	self.instance2:pause()
+	local function spriteListener( event )
+    	if (event.phase == "loop") then
+    		self.instance2:pause()
+    	end
+	end
+	 
+	-- Add sprite listener
+	self.instance2:addEventListener( "sprite", spriteListener )
 
 	return
 
