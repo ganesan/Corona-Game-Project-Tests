@@ -2,7 +2,7 @@ module(..., package.seeall)
 
 require "sprite"
 
-Player = {life=3, instance2}
+Player = {life=3, instance2, initXpos = 120}
 
 function Player:new(o)
 
@@ -15,14 +15,6 @@ function Player:new(o)
 	
 end
 
-function Player:setSpriteInstance(spriteSet)
-	self.instance2 = sprite.newSprite( spriteSet )
-end
-
-function Player:getSpriteInstance()
-	return self.instance2
-end
-
 function Player:spawn_player()
 
 	local playerGroup = display.newGroup()
@@ -32,10 +24,11 @@ function Player:spawn_player()
 	local spriteSet2 = sprite.newSpriteSet(sheet2, 1, 2)
 	sprite.add( spriteSet2, "man", 1, 2, 200, 0 ) -- 
 
-	self:setSpriteInstance(spriteSet2)
+	self.instance2 = sprite.newSprite( spriteSet2 )
 	
-	self.instance2.x = 120
-	self.instance2.y = 280
+	self.instance2:setReferencePoint(display.BottomLeftReferencePoint)
+	self.instance2.x = self.initXpos
+	self.instance2.y = 244
 	self.instance2.rotation = 0
 
 	self.instance2:prepare("man")

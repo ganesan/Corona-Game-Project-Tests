@@ -14,7 +14,7 @@ require "sprite"
 local Player = require("Player")
 local player = Player.Player:new()
 
-Level = {result = nil, gametime = nil, initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5} 
+Level = {result = nil, gametime = nil, initTime = 60, textObj, textTimeOver, textStar, starsQty = 0, timeSpeed = 1000, levelSpeed = 2, pauseTime = 5000, levelBG={{"levelBG/lvl1_bg1.png", "levelBG/lvl1_bg2.png"},	{"levelBG/lvl2_bg1.png", "levelBG/lvl2_bg2.png"}}, levelFloor={{"levelBG/lvl1_grd1.png", "levelBG/lvl1_grd2.png"},	{"levelBG/lvl2_grd1.png", "levelBG/lvl2_grd2.png"}}, nextLvlLock = "true",  halfW = display.contentWidth*0.5, distance=0} 
 
 --********************************************************************************************************************************************************--
 --
@@ -370,8 +370,10 @@ function Level:createLevel(lvlset, floorset)
 	local levelGroup = display.newGroup()
  
 
-	local myRectangle = display.newRect(330, 240, 150, 50)
-	myRectangle.rotation = -15
+	local myRectangle = display.newRect(330, 262, 200, 38)
+	myRectangle:setReferencePoint(display.TopLeftReferencePoint)
+	--print("distance "..myRectangle.x-player.initXpos)
+	myRectangle.rotation = 345
 	myRectangle.strokeWidth = 2
 	myRectangle:setFillColor(140, 140, 140)
 	myRectangle:setStrokeColor(180, 180, 180)
@@ -390,8 +392,17 @@ function Level:createLevel(lvlset, floorset)
 		   grass1:translate(self.levelSpeed*-2, 0);
 		   grass2:translate(self.levelSpeed*-2, 0);
 		   myRectangle:translate(self.levelSpeed*-2, 0)
+
+		   if (player.instance2.x > player.initXpos-10 or player.instance2.x < player.initXpos+10) then
+		   	--print (player.instance2.x)
+		   	player.instance2.x = player.initXpos
+		   end
+
+		   if (player.instance2.rotation < -15 or player.instance2.rotation > 15) then
+		   		player.instance2.rotation = 0
+		   end
 		   
-		   
+
 		   if ((bg1.x + bg1.width / 2) < display.contentWidth and (bg1.x + bg1.width / 2) > 0) then
 			  bg2.x = bg1.x + bg1.width;
 			  grass2.x = grass1.x + grass1.width;
@@ -410,7 +421,7 @@ function Level:createLevel(lvlset, floorset)
 
 	physics.addBody( grass1, "static", { friction=1.0, density=1.0, bounce=0, shape=groundShape } )
 	physics.addBody( grass2, "static", { friction=1.0, density=1.0, bounce=0, shape=groundShape } )
-	physics.addBody( myRectangle, "static", { friction=0.5, density=1.0, bounce=0.1, shape=obstacleShape } )
+	physics.addBody( myRectangle, "static", { friction=0.5, density=1.0, bounce=0.1 } )
 	
 	levelGroup:insert( bg1 )
 	levelGroup:insert( bg2 )
