@@ -378,6 +378,7 @@ function Level:createLevel(lvlset, floorset)
 	myRectangle:setFillColor(140, 140, 140)
 	myRectangle:setStrokeColor(180, 180, 180)
 
+	--local myCircle = display.newCircle(50,50,50)
 
 	local bg1 = display.newImage( lbg1, 0, 0 ); -- place bg1 at the origin
 	local bg2 = display.newImage( lbg2, bg1.x + (bg1.width * 1.5), 0); -- place bg2 right after bg1
